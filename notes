@@ -1,0 +1,53 @@
+
+
+--local server is called LocalDB
+--instance is LocalDB
+--TestLogin
+--@1990Newlogin
+
+/*
+two database tables
+/flashcards
+id -- int - this is the internal Id
+flashcard_question - string
+flashcard_answer - string
+
+
+/stacks
+stack_id -- int - this is the internal id
+flashcard_id -- int - foreign key
+stack_name - string
+
+/studysessions
+session_id - int
+session_score - int
+session_date - string
+session_stack - int
+
+-- Add primary key to an existing column in an existing table
+/*
+ALTER TABLE dbo.flashcards
+ADD CONSTRAINT pk_flashcards PRIMARY KEY (id);
+
+
+-- Add foreign key with actions on delete
+ALTER TABLE dbo.stacks
+ADD CONSTRAINT fk_flashcards FOREIGN KEY (flashcard_id) a
+    REFERENCES dbo.flashcards(id)
+    ON DELETE CASCADE;
+
+    -- Reset the auto-increment counter to the highest existing ID
+ALTER TABLE ExampleTable AUTO_INCREMENT = 1;
+
+--ALTER TABLE dbo.stacks DROP CONSTRAINT fk_flashcards
+--ALTER TABLE dbo.flashcards DROP CONSTRAINT pk_flashcards
+
+ALTER TABLE dbo.stacks
+   ADD id int NOT NULL IDENTITY (1,1),
+   CONSTRAINT PK_stacks PRIMARY KEY CLUSTERED (id)
+
+	ALTER TABLE dbo.studysessions
+ADD score int NOT NULL;
+    
+    */
+
