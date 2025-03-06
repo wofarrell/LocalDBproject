@@ -2,6 +2,7 @@
 
 
 using LOCALDATABASEPROJECT.Controllers;
+using LOCALDATABASEPROJECT.Models;
 using Microsoft.IdentityModel.Tokens;
 
 
@@ -9,6 +10,8 @@ namespace LOCALDATABASEPROJECT;
 
 internal class UserInterface
 {
+    FlashcardController flashcardController = new();
+    StackController stackController = new();
 
     //private readonly LogInsert _logInsert = new();
     //private readonly LogDelete _logDelete = new();
@@ -55,15 +58,15 @@ internal class UserInterface
                     break;
 
                 case "2": //Manage flashcards
-
+                    FlashcardMenu();
                     break;
 
                 case "3":  //Start a study session                 
-
+                    StudySession();
                     break;
 
                 case "4": //View study sessions
-
+                    StudySessionView();
                     break;
 
                 //exit
@@ -76,8 +79,8 @@ internal class UserInterface
 
     internal void StackMenu()
     {
-        StackController stackController = new();
-        bool flashcardmenubool = true;
+        
+        bool stackmenubool = true;
         do
         {
             Console.WriteLine("Choose option by number:\n1. View flashcard stacks\n2. Create Flashcard Stack\n3. Delete Flashcard Stack\n4. exit");
@@ -116,7 +119,7 @@ internal class UserInterface
 
                 //Delete flashcard stack by ID
                 if (fcMenuChoice != null && (fcMenuChoice == "3"))
-                    {
+                {
                     Console.WriteLine("Enter the id of the flashcard stack that you want to delete, or type 'exit'");
                     int stackDeleteEntry;
                     string? stackDeleteEntryString = "";
@@ -142,16 +145,108 @@ internal class UserInterface
                 //Exit
                 if (fcMenuChoice != null && (fcMenuChoice == "4"))
                 {
-                    flashcardmenubool = false;
+                    stackmenubool = false;
                 }
-              
+
+            }
+
+
+        } while (stackmenubool == true);
+    }
+
+    internal void FlashcardMenu()
+    {
+        
+        bool flashcardmenubool = true;
+
+        do
+        {
+            Console.WriteLine("Choose option by number or type 'exit':\n1. View flashcards by stack\n2. Create Flashcard\n3. Delete Flashcard");
+
+            bool validEntry = false;
+            string fcmenuchoice = "";
+            do
+            {
+                string? fcinputChoice = Console.ReadLine();
+                {
+                    if (fcinputChoice != null && (fcinputChoice == "1" || fcinputChoice == "2" || fcinputChoice == "3" || fcinputChoice == "exit"))
+                    {
+                        //if (inputChoice == "1" || inputChoice == "2" || inputChoice == "3" || inputChoice == "4")
+                        fcmenuchoice = fcinputChoice;
+                        validEntry = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nplease enter a valid input");
+                    }
+                }
+            } while (validEntry == false);
+
+
+            switch (fcmenuchoice)
+            {
+
+                case "1": //View flashcards by stack
+                    Console.WriteLine("Choose a stack by their ID below or type 'exit'");
+                    stackController.StackView();
+                    
+                    int stackSelectionEntry;
+                    string? stackEntryString = "";
+                    bool stackSelectionBool = false;
+                    do
+                    {
+                        stackEntryString = Console.ReadLine();
+                        
+
+                        if (stackEntryString != null)
+                        {
+                            bool VariableEntry = int.TryParse(stackEntryString, out stackSelectionEntry);
+                            flashcardController.FlashcardView(stackSelectionEntry);
+                            Console.WriteLine("Press any key to go back to the flashcard menu");
+                            Console.ReadKey();
+                            stackSelectionBool = true;
+                        }
+                        if (stackEntryString == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid stack id");
+                        }
+                    } while (stackSelectionBool == false);
+
+                    break;
+
+                case "2": //Create Flashcard
+                    //select stack. stack must exist. 
+                    //flashcard question
+                    //flashcard answer
+
+
+                    break;
+
+                case "3":  //Delete Flashcard                 
+                    
+                    break;
+
+                //exit
+                case "exit":
+                    flashcardmenubool = false;
+                    break;
             }
 
 
         } while (flashcardmenubool == true);
     }
 
+    internal void StudySession()
+    {
 
+    }
+
+    internal void StudySessionView()
+    { }
 }
 
 
