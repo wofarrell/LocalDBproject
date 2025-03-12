@@ -79,7 +79,7 @@ internal class UserInterface
 
     internal void StackMenu()
     {
-        
+
         bool stackmenubool = true;
         do
         {
@@ -156,7 +156,8 @@ internal class UserInterface
 
     internal void FlashcardMenu()
     {
-        
+
+
         bool flashcardmenubool = true;
 
         do
@@ -189,14 +190,14 @@ internal class UserInterface
                 case "1": //View flashcards by stack
                     Console.WriteLine("Choose a stack by their ID below or type 'exit'");
                     stackController.StackView();
-                    
+
                     int stackSelectionEntry;
                     string? stackEntryString = "";
                     bool stackSelectionBool = false;
                     do
                     {
                         stackEntryString = Console.ReadLine();
-                        
+
 
                         if (stackEntryString != null)
                         {
@@ -220,14 +221,162 @@ internal class UserInterface
 
                 case "2": //Create Flashcard
                     //select stack. stack must exist. 
-                    //flashcard question
-                    //flashcard answer
 
+                    int stack_id = 0;
+                    string? flashcard_question = "";
+                    string? flashcard_answer = "";
+
+                    Console.WriteLine("select the stack the flashcard will be under from the list below, or type 'exit to return");
+                    stackController.StackView();
+                    bool flashcardStackSelectionBool = false;
+                    do
+                    {
+                        string? flashcardStackEntry = Console.ReadLine();
+                        if (flashcardStackEntry != null)
+                        {
+                            bool VariableEntry = int.TryParse(flashcardStackEntry, out int flashcardStackSelectionEntry);
+
+                            if (VariableEntry == true)
+                            {
+                                Console.WriteLine($"Flashcard stack {flashcardStackSelectionEntry} chosen ");
+                                stack_id = flashcardStackSelectionEntry;
+                                flashcardStackSelectionBool = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("\nplease enter a valid stack id");
+                            }
+                        }
+                        if (flashcardStackEntry == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid stack id");
+                        }
+                    } while (flashcardStackSelectionBool == false);
+
+                    //can use flashcardStackSelectionEntry in final insert query
+
+                    //flashcard question
+                    Console.WriteLine("Enter the flashcard question");
+                    bool flashcardQuestionBool = false;
+
+                    do
+                    {
+
+                        string? flashcardQuestionEntry = Console.ReadLine();
+                        if (flashcardQuestionEntry != null)
+                        {
+
+                            Console.WriteLine($"Flashcard question '{flashcardQuestionEntry}' entered.");
+                            flashcard_question = flashcardQuestionEntry;
+                            flashcardQuestionBool = true;
+                        }
+                        if (flashcardQuestionEntry == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid flashcard question");
+                        }
+
+                    } while (flashcardQuestionBool == false);
+
+                    //flashcard answer
+                    Console.WriteLine("Enter the flashcard answer");
+                    bool flashcardAnswerBool = false;
+
+                    do
+                    {
+                        string? flashcardAnswerEntry = Console.ReadLine();
+                        if (flashcardAnswerEntry != null)
+                        {
+
+                            Console.WriteLine($"Flashcard answer '{flashcardAnswerEntry}' entered.");
+                            flashcard_answer = flashcardAnswerEntry;
+                            flashcardAnswerBool = true;
+                        }
+                        if (flashcardAnswerEntry == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid flashcard question");
+                        }
+
+                    } while (flashcardAnswerBool == false);
+
+                    //converting them to these 
+                    /*
+                    int stack_id;
+                    string? flashcard_question = "";
+                    string? flashcard_answer = "";
+                    */
+
+                    flashcardController.FlashcardCreate(stack_id, flashcard_question, flashcard_answer);
+                    Console.WriteLine("\nFlashcard successfully created");
 
                     break;
 
-                case "3":  //Delete Flashcard                 
-                    
+                case "3":  //Delete Flashcard 
+                    //listing stacks to choose from                
+                    Console.WriteLine("Choose a flashcard stack to view by their ID below or type 'exit'");
+                    stackController.StackView();
+                    int fcStackSelectionEntry;
+                    string? fcStackEntryString = "";
+                    bool fcStackSelectionBool = false;
+                    do
+                    {
+                        fcStackEntryString = Console.ReadLine();
+                        if (fcStackEntryString != null)
+                        {
+                            bool VariableEntry = int.TryParse(fcStackEntryString, out fcStackSelectionEntry);
+                            flashcardController.FlashcardView(fcStackSelectionEntry);
+                            Console.WriteLine("Press any key to go back to the flashcard menu");
+                            Console.ReadKey();
+                            stackSelectionBool = true;
+                        }
+                        if (fcStackEntryString == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid stack id");
+                        }
+                    } while (fcStackSelectionBool == false);
+
+                    //delete flashcard by flashcard_id
+                    int flashcardIdSelection;
+                    string? fcEntryString = "";
+                    bool fcSelectionBool = false;
+
+                    do
+                    {
+                        fcEntryString = Console.ReadLine();
+                        if (fcEntryString != null)
+                        {
+                            bool VariableEntry = int.TryParse(fcEntryString, out flashcardIdSelection);
+                            flashcardController.FlashcardDelete(flashcardIdSelection);
+                            Console.WriteLine("Press any key to go back to the flashcard menu");
+                            Console.ReadKey();
+                            stackSelectionBool = true;
+                        }
+                        if (fcEntryString == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid stack id");
+                        }
+                    } while (fcSelectionBool == false);
+
+                    Console.WriteLine("\nFlashcard successfully deleted");
                     break;
 
                 //exit
@@ -235,18 +384,48 @@ internal class UserInterface
                     flashcardmenubool = false;
                     break;
             }
-
-
         } while (flashcardmenubool == true);
     }
 
     internal void StudySession()
     {
+        //load stack of flashcards into memory by  stack_id
+        Console.WriteLine("Enter the number of the stack below to start a study session");
+        stackController.StackView();
 
+        string? ssStackSelectionString = "";
+        int ssStackSelectionInt = 0;
+        bool ssStackSelectionBool = false;
+        do
+                    {
+                        ssStackSelectionString = Console.ReadLine();
+                        if (ssStackSelectionString != null)
+                        {
+                            bool VariableEntry = int.TryParse(ssStackSelectionString, out ssStackSelectionInt);
+                            Console.WriteLine($"Stack #{ssStackSelectionInt} loaded");
+
+                            
+                            Console.ReadKey();
+                            ssStackSelectionBool = true;
+                        }
+                        if (ssStackSelectionString == "exit")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nplease enter a valid stack id");
+                        }
+                    } while (ssStackSelectionBool == false);
+
+
+        
     }
 
     internal void StudySessionView()
-    { }
+    {
+
+    }
 }
 
 
