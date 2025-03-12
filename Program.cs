@@ -10,7 +10,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.Clear();
+        //Console.Clear();
         UserInterface userInterface = new();
         userInterface.MainMenu();
     }

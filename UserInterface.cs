@@ -13,6 +13,8 @@ internal class UserInterface
     FlashcardController flashcardController = new();
     StackController stackController = new();
 
+    StudySessionController studySessionController = new();
+
     //private readonly LogInsert _logInsert = new();
     //private readonly LogDelete _logDelete = new();
     //private readonly LogUpdate _logUpdate = new();
@@ -24,7 +26,7 @@ internal class UserInterface
         bool menuBool = true;
         while (menuBool)
         {
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine("Flashcard Study Session Console App");
             Console.WriteLine("Please make a selection by number");
 
@@ -397,34 +399,35 @@ internal class UserInterface
         int ssStackSelectionInt = 0;
         bool ssStackSelectionBool = false;
         do
-                    {
-                        ssStackSelectionString = Console.ReadLine();
-                        if (ssStackSelectionString != null)
-                        {
-                            bool VariableEntry = int.TryParse(ssStackSelectionString, out ssStackSelectionInt);
-                            Console.WriteLine($"Stack #{ssStackSelectionInt} loaded");
-
-                            
-                            Console.ReadKey();
-                            ssStackSelectionBool = true;
-                        }
-                        if (ssStackSelectionString == "exit")
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nplease enter a valid stack id");
-                        }
-                    } while (ssStackSelectionBool == false);
+        {
+            bool VariableEntry = false;
+            ssStackSelectionString = Console.ReadLine();
+            if (ssStackSelectionString != null)
+            {
+                VariableEntry = int.TryParse(ssStackSelectionString, out ssStackSelectionInt);
+                Console.WriteLine($"Stack #{ssStackSelectionInt} loaded");
 
 
-        
+                
+                ssStackSelectionBool = true;
+            }
+            if (ssStackSelectionString == "exit")
+            {
+                break;
+            }
+            if (!VariableEntry)
+            {
+                Console.WriteLine("\nplease enter a valid stack id");
+            }
+        } while (ssStackSelectionBool == false);
+
+        studySessionController.StudySession(ssStackSelectionInt);
+        Console.WriteLine("Study Session Completed");
     }
 
     internal void StudySessionView()
     {
-
+        studySessionController.StudySessionView();
     }
 }
 
